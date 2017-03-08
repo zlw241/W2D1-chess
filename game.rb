@@ -50,6 +50,7 @@ class Game
           if check_move?(destination)
             board.move_piece(board.selected_position, destination)
             board.selected_position = nil
+            change_players
           else
             message = "That's not a valid move"
           end
@@ -70,7 +71,6 @@ class Game
         puts message
         message = nil
       end
-      change_players
     end
   end
 

@@ -9,8 +9,4 @@ class Player
     @team = team 
   end
 
-  def take_turn 
- 
-  end  
-
 end 
