@@ -91,13 +91,15 @@ module Stepable
 end
 
 class Piece
+  attr_accessor :current_position, :color, :board
+
   COLOR_TO_DIR = {white: -1, black: 1}
+
   SYM_TO_UNICODE = {
     white: { K: "\u2654", Q: "\u2655", B: "\u2657", R: "\u2656", N: "\u2658", P: "\u2659"},
     black: { K: "\u265A", Q: "\u265B", B: "\u265D", R: "\u265C", N: "\u265E", P: "\u265F"}
   }
-  attr_accessor :current_position
-  attr_reader  :color, :board
+
   def initialize(current_position, color, board)
     @current_position = current_position
     @color = color
@@ -199,6 +201,24 @@ class Pawn < Piece
       false
     end
   end
+ 
+  def update_position(new_position)
+    self.current_position = new_position
+    if at_opposite_side?
+      self.queen
+    end
+  end
+
+  def at_opposite_side?
+    if forward_dir == -1 && current_position[0] == 0
+      debugger
+      true 
+    elsif forward_dir == 1 && current_position[0] == 7
+      true 
+    else
+      false
+    end
+  end
 
   def moves
     forward_steps + side_attacks
@@ -218,26 +238,42 @@ class Pawn < Piece
         steps << [(current_row + forward_dir), current_column]
       end
     else
-      if empty?([(current_row + forward_dir), current_column])
-        steps << [(current_row + forward_dir), current_column]
+      if is_valid?([current_row + forward_dir, current_column])
+        if empty?([(current_row + forward_dir), current_column])
+          steps << [(current_row + forward_dir), current_column]
+        end
       end
     end
     steps
   end
 
+  def queen
+    if forward_dir == -1 && current_position[0] == 0
+      new_queen = Queen.new(current_position, color, board)
+      board[current_position] = new_queen 
+    elsif forward_dir == 1 && current_position[0] == 7
+      new_queen = Queen.new(current_position, color, board)
+      board[current_position] = new_queen 
+    end
+  end
+
+
   def side_attacks
     steps = []
     current_row, current_column = current_position
-    if is_enemy?([(current_row + forward_dir), current_column + 1])
-      steps << [(current_row + forward_dir), current_column + 1]
+    if is_valid?([(current_row + forward_dir), current_column + 1])
+      if is_enemy?([(current_row + forward_dir), current_column + 1])
+        steps << [(current_row + forward_dir), current_column + 1]
+      end
     end
 
-    if is_enemy?([(current_row + forward_dir), current_column - 1])
-      steps << [(current_row + forward_dir), current_column - 1]
+    if is_valid?([(current_row + forward_dir), current_column - 1])
+      if is_enemy?([(current_row + forward_dir), current_column - 1])
+        steps << [(current_row + forward_dir), current_column - 1]
+      end
     end
     steps
   end
-
 end
 
 

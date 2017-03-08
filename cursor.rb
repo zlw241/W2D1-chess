@@ -85,16 +85,6 @@ class Cursor
       exit(0)
     end
   end
-    # case key
-    # when :return || :space
-    #   cursor_pos
-    # when :left || :right || :up || :down
-    #   update_pos(MOVES[key])
-    #   nil
-    # when :ctrl_c
-    #   exit(0)
-    # end
-  #end
 
   def update_pos(diff)
     row_diff, col_diff = diff
