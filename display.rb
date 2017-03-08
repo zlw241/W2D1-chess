@@ -10,11 +10,14 @@ class Display
     #@cursor = Cursor.new([0,0], board)
   end
 
-  def render(cursor)
+  def render(cursor, message)
     system("clear")
-    (0...board.grid.length).each_with_index do |_,index|
+    (0...board.grid.length).each_with_index do |_, index|
       render_background(index, cursor)
     end
+    if message
+      puts message 
+    end 
   end
 
   def render_background(row_index, cursor)

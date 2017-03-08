@@ -62,15 +62,12 @@ class Game
 
   def play
     message = nil
-    display.render(cursor)
+    display.render(cursor, message)
     while true
       current_cursor = cursor.get_input
       message = handle_input(current_cursor)
-      display.render(cursor)
-      if message
-        puts message
-        message = nil
-      end
+      display.render(cursor, message)
+      message = nil
     end
   end
 
